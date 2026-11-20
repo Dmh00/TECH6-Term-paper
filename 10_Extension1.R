@@ -33,10 +33,9 @@ dist = tw[!duplicated(tw$district),]
 summary(rddensity(dist$iwm_c, c=0))
 
 # Check whether 1994 township characteristics jump at cutoff
-summary(rdrobust(tw$vshr_islam1994,x,c=0,cluster=tw$district))
-summary(rdrobust(tw$partycount,x,c=0,cluster=tw$district))
-summary(rdrobust(tw$lpop1994,x,c=0,cluster=tw$district))
-
+print(summary(rdrobust(tw$vshr_islam1994,x,c=0,cluster=tw$district)))
+print(summary(rdrobust(tw$partycount,x,c=0,cluster=tw$district)))
+print(summary(rdrobust(tw$lpop1994,x,c=0,cluster=tw$district)))
 
 # Run the analysis for women and men
 # store spillover and SUTVA-check results
@@ -118,8 +117,23 @@ res$mde = (qnorm(0.80)+qnorm(0.975))*res$se
 print(res,digits=3)
 print(sutva,digits=3)
 
+# Balance check: do 1994 covariates jump at district centre cutoff?
+balance = data.frame()
+# RD with the covariates as outcome
+for (v in c("vshr_islam1994","partycount","lpop1994")) {
+  r=rdrobust(tw[[v]],x,c=0, cluster=tw$district)
+  balance = rbind(balance, data.frame(variable=v,
+                                      est=r$coef["Conventional",],
+                                      p=r$pv["Robust",],
+                                      h=r$bws["h","left"],
+                                      n_left=r$N_h[1],
+                                      n_right=r$N_h[2]))
+}
+write.csv(balance,"outputs/E1_balance.csv",row.names=FALSE)
+
 # stop writing to file
 sink()
 # save results as csv files
 write.csv(res,"outputs/E1_spillover.csv",row.names=FALSE)
 write.csv(sutva,"outputs/E1_sutva.csv",row.names=FALSE)
+
