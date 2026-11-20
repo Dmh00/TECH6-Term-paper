@@ -1,0 +1,346 @@
+
+Manipulation testing using local polynomial density estimation.
+
+Number of obs =       557
+Model =               unrestricted
+Kernel =              triangular
+BW method =           estimated
+VCE method =          jackknife
+
+c = 0                 Left of c           Right of c          
+Number of obs         478                 79                  
+Eff. Number of obs    128                 74                  
+Order est. (p)        2                   2                   
+Order bias (q)        3                   3                   
+BW est. (h)           0.16                0.207               
+
+Method                T                   P > |T|             
+Robust                -1.7172             0.0859              
+
+
+P-values of binomial tests (H0: p=0.5).
+
+Window Length              <c     >=c    P>|T|
+0.037     + 0.037          31      20    0.1608
+0.051     + 0.056          38      30    0.3961
+0.065     + 0.075          47      40    0.5203
+0.078     + 0.094          52      44    0.4752
+0.092     + 0.113          60      51    0.4478
+0.105     + 0.132          77      58    0.1210
+0.119     + 0.151          90      65    0.0535
+0.133     + 0.169         102      69    0.0142
+0.146     + 0.188         117      72    0.0013
+0.160     + 0.207         128      74    0.0002
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             172          124
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.076        0.076
+BW bias (b)                   0.122        0.122
+rho (h/b)                     0.626        0.626
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect     0.023     0.130     0.897    [-0.110 , 0.126]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             167          115
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.067        0.067
+BW bias (b)                   0.113        0.113
+rho (h/b)                     0.587        0.587
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    -0.219    -0.236     0.813    [-0.842 , 0.660]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             153          112
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.061        0.061
+BW bias (b)                   0.102        0.102
+rho (h/b)                     0.603        0.603
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect     0.072     0.396     0.692    [-0.274 , 0.413]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             172          124
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.074        0.074
+BW bias (b)                   0.123        0.123
+rho (h/b)                     0.605        0.605
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    -0.025    -0.908     0.364    [-0.091 , 0.033]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                      Manual
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.              82           69
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.037        0.037
+BW bias (b)                   0.037        0.037
+rho (h/b)                     1.000        1.000
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    -0.024    -1.187     0.235    [-0.131 , 0.032]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                      Manual
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             400          195
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.148        0.148
+BW bias (b)                   0.148        0.148
+rho (h/b)                     1.000        1.000
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    -0.014    -0.863     0.388    [-0.077 , 0.030]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (361 clusters).
+
+Number of Obs.                  835
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                  746           89
+Eff. Number of Obs.              60           27
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.048        0.048
+BW bias (b)                   0.096        0.096
+rho (h/b)                     0.502        0.502
+Clusters (g)                    319           42
+Unique Obs.                     319           42
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect     0.002     0.019     0.985    [-0.059 , 0.061]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             125           92
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.050        0.050
+BW bias (b)                   0.086        0.086
+rho (h/b)                     0.583        0.583
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    -0.032    -1.265     0.206    [-0.116 , 0.025]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                      Manual
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.              54           60
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.025        0.025
+BW bias (b)                   0.025        0.025
+rho (h/b)                     1.000        1.000
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    -0.028     0.553     0.580    [-0.088 , 0.158]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (557 clusters).
+
+Number of Obs.                 1641
+BW type                      Manual
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 1395          246
+Eff. Number of Obs.             220          147
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.101        0.101
+BW bias (b)                   0.101        0.101
+rho (h/b)                     1.000        1.000
+Clusters (g)                    478           79
+Unique Obs.                     478           79
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect     0.001    -1.640     0.101    [-0.112 , 0.010]     
+=====================================================================
+Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (361 clusters).
+
+Number of Obs.                  835
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                  746           89
+Eff. Number of Obs.              89           50
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.089        0.089
+BW bias (b)                   0.109        0.109
+rho (h/b)                     0.819        0.819
+Clusters (g)                    319           42
+Unique Obs.                     319           42
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P>|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect     0.027     0.772     0.440    [-0.035 , 0.080]     
+=====================================================================
+  sex      h    n  mean no_controls no_controls_se no_controls_p
+1   f 0.1551  619 0.118    -0.00632         0.0182        0.7301
+2   f 0.0775  297 0.121    -0.02350         0.0207        0.2613
+3   f 0.3102 1173 0.128     0.00679         0.0145        0.6416
+4   m 0.1730  678 0.176     0.03602         0.0187        0.0592
+5   m 0.0865  316 0.175     0.01019         0.0282        0.7194
+6   m 0.3460 1257 0.174     0.01842         0.0156        0.2422
+  controls      se      p district_se district_p own_mayor
+1  0.00972 0.01174 0.4114     0.01357      0.475   0.00936
+2  0.01820 0.01805 0.3189     0.02516      0.471   0.01613
+3  0.00689 0.00967 0.4786     0.00859      0.423   0.00661
+4  0.02096 0.01185 0.0822     0.01735      0.228   0.02182
+5  0.00446 0.03083 0.8856     0.03495      0.899   0.00731
+6  0.00328 0.01136 0.7739     0.01116      0.769   0.00331
+  own_mayor_se own_mayor_p    mde
+1      0.01120      0.4069 0.0329
+2      0.01631      0.3279 0.0506
+3      0.00947      0.4877 0.0271
+4      0.01144      0.0614 0.0332
+5      0.03021      0.8098 0.0864
+6      0.01100      0.7644 0.0318
+  sex     h   n    own own_se own_p own_ctrl own_ctrl_se own_ctrl_p
+1   f 0.240 544 0.0237 0.0089 0.010   0.0229     0.00905     0.0141
+2   m 0.323 704 0.0142 0.0102 0.168   0.0140     0.01031     0.1798
+    centre centre_se centre_p
+1 -0.01317   0.00769   0.0922
+2 -0.00905   0.01078   0.4047
