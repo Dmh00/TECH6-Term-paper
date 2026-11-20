@@ -24,8 +24,7 @@ source("10_Extension1.R",local=new.env())
 # Extension 2 (Python): needs numpy, pandas, scikit-learn, matplotlib
 if (RUN_PYTHON) {
   cat("\n============= 11_Extension2.py ===============")
-  source("11_Extension2.py",local=new.env())
-  py = Sys.which("python)")
+  py = Sys.which("python)"
   if (py=="") py = Sys.which("python3")
   if (system2(py,"11_Extension2.py")!=0) stop("11_Extension2.py failed")
 }
