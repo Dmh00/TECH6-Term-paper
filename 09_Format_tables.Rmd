@@ -1,0 +1,338 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r load_results, include=FALSE, warning=FALSE}
+source("00_Setup.R")
+source("01_Table1.R")
+source("02_Table2.R")
+source("03_Table3.R")
+source("04_Table7.R")
+
+spill = read.csv("outputs/E1_spillover.csv")
+sutva = read.csv("outputs/E1_sutva.csv")
+
+res = read.csv("outputs/results_all.csv")
+only90 = read.csv("outputs/results_1990_outcome_only.csv")
+
+# column names for the results of the python extension
+names(res) = c("version","seed","model","degree","alpha","ncoef","nonzero","cv_rmse","rmse","r2","n_train","n_test")
+```
+
+## Helper functions
+
+```{r helpers}
+# three helper functions for easier formatting
+# number with 3 decimals
+fmt = function(x) sprintf("%.3f",x)
+# number with 4 decimals (for RMSE and alpha)
+fmt4 = function(x) sprintf("%.4f",x)
+# number in brackets ()
+se_fmt = function(x) sprintf("(%.3f)",x)
+```
+
+
+## Table I
+
+```{r table1 format}
+# labels for the 13 variables
+labels = c("Share women aged 15–20 with high school education",
+           "Share men aged 15–20 with high school education",
+           "Islamic mayor in 1994",
+           "Islamic vote share 1994",
+           "Number of parties receiving votes 1994",
+           "Log population in 1994",
+           "Population share below 19 in 2000",
+           "Population share above 60 in 2000",
+           "Gender ratio in 2000",
+           "Household size in 2000",
+           "District center",
+           "Province center",
+           "Sub-metro center")
+
+# create empty matrix
+show = matrix("",nrow=0,ncol=5)
+for (i in 1:nrow(table1)) {
+  # add heading row for variable 1,3 and 4
+  if (i == 1) show = rbind(show,c("*Main outcome variables*","","","",""))
+  if (i == 3) show = rbind(show, c("*Main explanatory variable*","","","",""))
+  if (i == 4) show = rbind(show, c("*Covariates*","","","",""))
+
+  # first row: means for each variable
+  show = rbind(show, c(labels[i],
+                        fmt(table1$mean_all[i]),
+                        fmt(table1$mean_islamic[i]),
+                        fmt(table1$mean_secular[i]),
+                        paste0(fmt(table1$difference[i]),table1$stars[i])))
+  # second row: SD with brackets, SE for diference
+  show = rbind(show, c("",
+                       se_fmt(table1$sd_all[i]),
+                       se_fmt(table1$sd_islamic[i]),
+                       se_fmt(table1$sd_secular[i]),
+                       se_fmt(table1$se[i])))
+}
+# number of municipalities
+show = rbind(show,c("Observations",nrow(s),sum(isl),sum(!isl),nrow(s)))
+# columns names
+colnames(show)=c("","All","Islamic","Secular","Difference")
+
+knitr::kable(show,align=c("l",rep("r",4)), caption="TABLE I: SUMMARY STATISTICS")
+```
+
+
+## TABLE II
+
+```{r table2 format}
+# 10 column matrix for table
+show = matrix("",nrow=0,ncol=10)
+
+# add results for women and men
+for (g in c("f","m")) {
+  r = table2[table2$sex==g,]
+  r = r[order(r$column),]                  
+  
+  # one block for headings, outcome mean, Islamic mayor
+  show = rbind(show,c(ifelse(g=="f","**Panel A: Women**","**Panel B: Men**"),rep("",9)),
+               c("Outcome mean",fmt(r$mean)),c("Islamic mayor in 1994",r$cell),c("",se_fmt(r$se)),
+               c("Bandwidth",fmt(r$h)),c("R2",sprintf("%.2f",r$r2)),c("Observations",r$n))
+}
+
+# Panel C: p-values of the test that women and men are equal
+show = rbind(show,
+             c("**Panel C: women = men**",rep("",9)),
+             c("p-value",fmt(panelC)))
+
+colnames(show) = c("",paste0("(",1:9,")"))
+
+knitr::kable(show, align=c("l",rep("r",9)), caption="TABLE II: ISLAMIC RULE AND HIGH SCHOOL EDUCATION")
+```
+
+
+## TABLE III
+
+```{r table3 format}
+
+# top two rows: bandwidths and column numbers
+show = rbind(c("",1,0.5,0.25,0.1,0.05),
+              c("","(1)","(2)","(3)","(4)","(5)"))
+
+# Panels and polynomial orders
+for (g in c("f","m")) {
+  panel = ifelse(g=="f","**Panel A: Women**","**Panel B: Men**")
+  show = rbind(show,c(panel,rep("",5)))
+  show = rbind(show,c("*Polynomial order of control function*",rep("",5)))
+  
+  # Rows for polynomial order
+  for (i in c("None", "Linear","Quadratic","Cubic","Quartic")) {
+    r = table3[table3$sex==g & table3$order==i,]
+    r = r[order(-r$h),]                     
+    show = rbind(show,c(i, r$cell),c("",se_fmt(r$se)))
+  }
+  show = rbind(show,c("Observations",r$n))
+}
+colnames(show) = c("","","","Bandwidth","","")
+
+knitr::kable(show,align=c("l", rep("r", 5)),caption="TABLE III: ALTERNATIVE RD SPECIFICATIONS")
+```
+
+## Table VII
+
+```{r table7 format}
+# estimate with stars
+table7$cell = paste0(fmt(table7$b),stars(table7$p))
+
+# model versions
+models = c("A1 OLS no controls","A2 OLS controls",
+            "B1 RD h","B2 RD h/2","B3 RD 2h")
+
+# model titles
+model_titles = c("Model 1. Unconditional estimates",
+           "Model 2. Unconditional estimates",
+           "Model 1. Bandwidth = h",
+           "Model 2. Bandwidt = h/2",
+           "Model 3. Bandwidth = 2h")
+
+# header rows: age cohort, gender,column numbers, outcome
+show = rbind(
+  c("Age Cohort", "15-19","15-19","15-29","15-29","15-19","15-19"),
+  c("Gender","Women","Men","Women","Men","Women","Men"),
+  c("","(1)","(2)","(3)","(4)","(5)","(6)"),
+  c("Outcome","High School","High School",
+    "High School","High School","Unmarried","Unmarried"))
+
+# one block per model, 5 total
+for (i in 1:5) {
+  # put the six outcomes in same order as columns
+  r = table7[table7$model==models[i],]
+  r =r[match(outcomes, r$outcome),]     
+  
+  # Panel headings and outcome means
+  if (i==1) {
+    show = rbind(show,
+                 c("**Panel A: Global OLS**",rep("",6)),
+                 c("Outcome mean",fmt(r$mean)))
+  }
+  if (i==3) {
+    show = rbind(show,
+                 c("**Panel B: Conditonal local linear RD**",rep("",6)),
+                 c("Outcome mean",fmt(r$mean)))
+  }
+  # Model title, estimates and standard errors
+  show = rbind(show,
+               c(paste0("*",model_titles[i],"*"),rep("",6)),
+               c("Islamic mayor in 1994",r$cell),
+               c("",se_fmt(r$se)))
+  
+  # Bandwidths and observations
+  if (i>=2) {
+    show = rbind(show,
+                 c("Bandwidth",fmt(r$h)),
+                 c("Observations",r$n))
+  }
+}
+
+knitr::kable(show,align=c("l",rep("r",6)),caption = "TABLE VII: EDUCATION IN 2011")
+```
+
+```{r table e1.1}
+# Spillover results
+f = spill[spill$sex=="f",]
+m = spill[spill$sex=="m",]
+
+# each specification gets 2 rows (estimate with stars, and standard error in brackets)
+show = rbind(
+  c("Main estimate (h)",
+    paste0(fmt(f$controls[1]),stars(f$p[1])),
+    paste0(fmt(m$controls[1]),stars(m$p[1]))),
+  c("",se_fmt(f$se[1]),se_fmt(m$se[1])),
+
+  c("Half bandwidth (h/2)",
+    paste0(fmt(f$controls[2]),stars(f$p[2])),
+    paste0(fmt(m$controls[2]),stars(m$p[2]))),
+  c("",se_fmt(f$se[2]),se_fmt(m$se[2])),
+
+  c("Double bandwidth (2h)",
+    paste0(fmt(f$controls[3]),stars(f$p[3])),
+    paste0(fmt(m$controls[3]),stars(m$p[3]))),
+  c("",se_fmt(f$se[3]),se_fmt(m$se[3])),
+
+  c("No controls",
+    paste0(fmt(f$no_controls[1]),stars(f$no_controls_p[1])),
+    paste0(fmt(m$no_controls[1]),stars(m$no_controls_p[1]))),
+  c("",se_fmt(f$no_controls_se[1]),se_fmt(m$no_controls_se[1])),
+
+  c("Control for township's own mayor",
+    paste0(fmt(f$own_mayor[1]),stars(f$own_mayor_p[1])),
+    paste0(fmt(m$own_mayor[1]),stars(m$own_mayor_p[1]))),
+  c("",se_fmt(f$own_mayor_se[1]),se_fmt(m$own_mayor_se[1])),
+
+  c("Cluster by district",
+    paste0(fmt(f$controls[1]),stars(f$district_p[1])),
+    paste0(fmt(m$controls[1]),stars(m$district_p[1]))),
+  c("",se_fmt(f$district_se[1]),se_fmt(m$district_se[1])),
+  
+  c("Bandwidth",fmt(f$h[1]),fmt(m$h[1])),
+  c("Townships",f$n[1],m$n[1]),
+  c("Minimum detectable effect",fmt(f$mde[1]),fmt(m$mde[1]))
+)
+colnames(show) = c("","Women","Men")
+
+knitr::kable(show,align=c("l","r","r"),caption="TABLE E1.1: SPILLOVER EFFECTS")
+```
+
+```{r table e1.2}
+# SUTVA check results
+sf = sutva[sutva$sex=="f",]
+sm = sutva[sutva$sex=="m",]
+
+# Own mayor effect without centre
+show = rbind(
+  c("Own Islamic mayor (paper's specification)",
+    paste0(fmt(sf$own),stars(sf$own_p)),paste0(fmt(sm$own),stars(sm$own_p))),
+  c("",se_fmt(sf$own_se),se_fmt(sm$own_se)),
+  
+  # Own mayor effect with centre
+  c("Own Islamic mayor, controlling for centre",
+    paste0(fmt(sf$own_ctrl),stars(sf$own_ctrl_p)),paste0(fmt(sm$own_ctrl),stars(sm$own_ctrl_p))),
+  c("",se_fmt(sf$own_ctrl_se),se_fmt(sm$own_ctrl_se)),
+  
+  c("Islamic mayor in district centre",
+    paste0(fmt(sf$centre),stars(sf$centre_p)),paste0(fmt(sm$centre),stars(sm$centre_p))),
+  c("",se_fmt(sf$centre_se),se_fmt(sm$centre_se)),
+  c("Bandwidth (own win margin)",fmt(sf$h),fmt(sm$h)),
+  c("Townships",sf$n,sm$n))
+
+colnames(show) = c("","Women","Men")
+knitr::kable(show, align = c("l","r","r"),caption="TABLE E1.2: SUTVA CHECK")
+```
+
+
+
+
+```{r table e2.2}
+show = data.frame()
+for (v in c("A","B","BC","C")) {
+  l = res[res$version==v & res$model=="Lasso",]
+  o = res[res$version==v & res$model=="OLS",]
+  show = rbind(show,data.frame(Model=v,
+                               Lasso=fmt(mean(l$r2)),
+                               OLS=fmt(mean(o$r2)),
+                               Lasso_better=paste(sum(l$rmse<o$rmse),"of 6")))
+}
+knitr::kable(show,align=c("l","r","r","r"),caption="TABLE B3: MEAN TEST R2 OVER SIX SPLITS")
+```
+
+```{r tableB1}
+
+# names for the four versions, used as titles in table
+model_names = c(A="(1) Election-year variables, linear",
+                B="(2) Election-year variables, squares and interactions",
+                BC="(3) Same as (2)",
+                C="(4) Adds 1990 census variables")
+
+# training + test sample for sample sizes
+n_full=format(res$n_train[res$version=="A"][1] +
+                res$n_test[res$version=="A"][1],big.mark=",")
+n_1990=format(res$n_train[res$version=="C"][1] +
+                res$n_test[res$version=="C"][1],big.mark=",")
+
+# Use main split (1234) for table
+main = res[res$seed==1234,]
+show = matrix("",nrow=0,ncol=6)
+
+# Repeat for all versions
+for (v in c("A","B","BC","C")) {
+  # place panel headings
+  if (v == "A") show=rbind(show,c(paste0("**Panel A: full sample (N = ",n_full,")**"),rep("",5)))
+  if (v == "BC") show=rbind(show,c(paste0("**Panel B: 1990 sample (N = ",n_1990,")**"),rep("",5)))
+
+  # give titles to versions, and put Lasso and OLS in rows
+  show = rbind(show,c(model_names[v],rep("",5)))
+  for (m in c("Lasso","OLS")) {
+    r = main[main$version==v & main$model==m,]
+    show = rbind(show,c(m, r$degree,
+                        # alpha for lasso
+                        ifelse(m=="Lasso",fmt4(r$alpha),""),
+                        ifelse(m=="Lasso",paste(r$nonzero,"of",r$ncoef),""),
+                        fmt4(r$rmse),fmt(r$r2)))
+  }
+
+  # 1990 female outcome only (version C)
+  if (v=="C") show=rbind(show,c("1990 female high school share only,OLS",1,"","",
+                                    fmt4(only90$Test.RMSE),fmt(only90$Test.R2)))
+  # benchmark: predict training mean
+  if (v %in% c("B","C")) {
+    r = main[main$version==v & main$model=="Predict the mean",]
+    show = rbind(show,c("Training mean","","","",fmt4(r$rmse),ifelse(abs(r$r2)<0.0005,"0.000",fmt(r$r2))))
+  }
+}
+colnames(show) = c("","Degree","Alpha","Non-zero coefs","Test RMSE","Test R2")
+
+knitr::kable(show,align=c("l","c","c",rep("r",3)),caption="TABLE B1: PREDICTING FEMALE HIGH SCHOOL COMPLETION IN 2000")
+```
