@@ -9,6 +9,7 @@ output:
 ---
 
 ```{r load_results, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
 source("00_Setup.R")
 source("01_Table1.R")
 source("02_Table2.R")
